@@ -6,7 +6,7 @@ from app.models.user import User
 from app.models.chat_room import ChatRoom
 from app.models.message import Message
 from app.models.user_chat_room import UserChatRoom
-from app.schemas.user_schema import UserCreate, UserLogin
+from app.schemas.user_schema import UserCreate, UserLogin, RegisterResponse
 from app.schemas.auth_schema import TokenResponse, LoginRequest
 from app.utils.auth_password import set_password, check_password
 from app.utils.jwt import create_access_token, get_current_user
@@ -34,7 +34,7 @@ def test_create_user( db: Session = Depends(get_db)):
   
   return JSONResponse(status_code=201, content={"message": "Usuario creado exitosamente", "user_id": test_user.id})
 
-@app.post("/register")
+@app.post("/register", response_model=RegisterResponse)
 def user_create(user: UserCreate, db: Session = Depends(get_db)):
   # verificando si el usuario ya existe
   existing_user = db.query(User).filter(User.email == user.email).first()
