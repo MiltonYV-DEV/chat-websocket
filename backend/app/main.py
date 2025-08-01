@@ -7,7 +7,10 @@ from app.models.chat_room import ChatRoom
 from app.models.message import Message
 from app.models.user_chat_room import UserChatRoom
 from app.schemas.user_schema import UserCreate, UserLogin
+from app.schemas.auth_schema import TokenResponse, LoginRequest
 from app.utils.auth_password import set_password, check_password
+from app.utils.jwt import create_access_token, get_current_user
+
 
 app = FastAPI() # FastAPI
 
@@ -53,7 +56,7 @@ def user_create(user: UserCreate, db: Session = Depends(get_db)):
     "message": "Usuario creado exitosamente", "user_id": new_user.id
   })
 
-@app.post("/login")
+@app.post("/login", response_model=TokenResponse)
 def user_login(user_login: UserLogin, db: Session = Depends(get_db)):
   user = db.query(User).filter(User.email == user_login.email).first()
 
@@ -63,4 +66,22 @@ def user_login(user_login: UserLogin, db: Session = Depends(get_db)):
   if not check_password(user_login.password, user.password):
     raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-  return {"message": "Inicio de sesión exitoso", "user_id": user.id, "username": user.username}
+  if user.is_active == 0:
+    user.is_active = 1
+    db.commit()
+    db.refresh(user)
+
+  # Se crea el token de acceso
+  access_token = create_access_token(data={"sub": user.email})
+
+  return {
+    "access_token": access_token,
+    "token_type": "bearer",
+    "user": {
+      "id": user.id,
+      "username": user.username,
+      "email": user.email,
+      "is_active": user.is_active
+    }
+  }
+
