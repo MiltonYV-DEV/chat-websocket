@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from app.db.database import engine, SessionLocal, Base
+from app.db.database import engine, SessionLocal, Base, get_db
 from app.models.user import User 
 from app.models.chat_room import ChatRoom
 from app.models.message import Message
@@ -13,12 +13,6 @@ app = FastAPI() # FastAPI
 
 Base.metadata.create_all(bind=engine)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.get("/")
 def read_root():
