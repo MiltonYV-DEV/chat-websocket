@@ -1,29 +1,46 @@
-const Login = () => {
-  interface LoginData {
+import { useAuthStore } from "../stores/userStore";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+interface LoginData {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
+  user: {
+    id: string;
+    name: string;
     email: string;
-    password: string;
-  }
+    is_active: number;
+  };
+}
 
-  interface LoginResponse {
-    access_token: string;
-    token_type: string;
-    user: {
-      id: string;
-      name: string;
-      email: string;
-      is_active: number;
-    };
-  }
+const API_URL = import.meta.env.VITE_API_URL;
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const Login = () => {
+  const [isCorrect, setIsCorrect] = useState(false);
+  const { login } = useAuthStore.getState();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.currentTarget.email.value);
-    console.log(e.currentTarget.password.value);
+    const userData: LoginData = {
+      email: e.currentTarget.email.value,
+      password: e.currentTarget.password.value,
+    };
+
+    console.log(userData);
+
+    await userLogin(userData);
   };
 
-  const login = async (credentials: LoginData): Promise<void> => {
+  const userLogin = async (credentials: LoginData): Promise<void> => {
     try {
-      const response = await fetch("http://localhost:3000/api/user", {
+      const response = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,19 +50,29 @@ const Login = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        setIsCorrect(true);
         throw new Error(errorData.detail || "Error al iniciar sesion");
       }
-
-      const data: LoginResponse = await response.json();
+      const data = await response.json();
+      setIsCorrect(false);
+      login(data.user, data.access_token);
+      navigate("/rooms");
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <div className="h-dvh flex bg-black justify-center items-center flex-col">
-      <h1 className="text-xl mb-2">
-        Inicio de <span className="text-blue-500">sesion</span>
+    <motion.div
+      className="h-dvh flex bg-gradient-to-b from-cyan-900 to-cyan-800 justify-center items-center flex-col"
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 30 }}
+      transition={{ duration: 0.3 }}
+    >
+      <h1 className="text-xl mb-2 md:text-3xl">
+        Inicio de <span className="text-blue-400">sesion</span>
       </h1>
       <form
         onSubmit={handleSubmit}
@@ -66,7 +93,7 @@ const Login = () => {
             required
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-2">
           <label
             htmlFor="password"
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -81,13 +108,19 @@ const Login = () => {
             required
           />
         </div>
-        <div className="flex justify-center">
+
+        <div className="flex flex-col justify-center ">
+          <div
+            className={`text-red-500 select-none text-center mb-3 transition-opacity ${isCorrect ? "opacity-100" : "opacity-0"}`}
+          >
+            <p>Datos incorrectos, intente de nuevo</p>
+          </div>
           <button className="bg-green-800 cursor-pointer hover:bg-green-600 transition-colors p-4 rounded-lg py-1">
             Enviar
           </button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

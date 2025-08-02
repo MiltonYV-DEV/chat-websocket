@@ -10,9 +10,23 @@ from app.schemas.user_schema import UserCreate, UserLogin, RegisterResponse
 from app.schemas.auth_schema import TokenResponse, LoginRequest
 from app.utils.auth_password import set_password, check_password
 from app.utils.jwt import create_access_token, get_current_user
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
 
+load_dotenv()  # Cargar variables de entorno desde .env
 
 app = FastAPI() # FastAPI
+
+origins = [os.getenv("FRONTEND_URL")]
+
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=origins,  # Permitir todas las origines
+  allow_credentials=True,
+  allow_methods=["*"],  # Permitir todos los métodos
+  allow_headers=["*"],  # Permitir todos los headers
+)
 
 Base.metadata.create_all(bind=engine)
 

@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 const Register = () => {
   const [password, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
+  const [buttomActive, setButtomActive] = useState<boolean>(false);
 
   useEffect(() => {
-    if (password === passwordConfirm) {
-      console.log("Las contraseñas coinciden");
+    if (password.length >= 6 && password === passwordConfirm) {
+      console.log("hola");
     }
   }, [password, passwordConfirm]);
 
@@ -75,7 +76,9 @@ const Register = () => {
           />
         </div>
         <div className="flex justify-center">
-          <button className="bg-green-800 cursor-pointer hover:bg-green-600 transition-colors p-4 rounded-lg py-1">
+          <button
+            className={`${buttomActive ? "bg-green-500" : "bg-gray-500"} cursor-pointer  transition-colors p-4 rounded-lg py-1`}
+          >
             Crear
           </button>
         </div>
