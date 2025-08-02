@@ -8,17 +8,6 @@ interface LoginData {
   password: string;
 }
 
-interface LoginResponse {
-  access_token: string;
-  token_type: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    is_active: number;
-  };
-}
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
@@ -54,10 +43,12 @@ const Login = () => {
         throw new Error(errorData.detail || "Error al iniciar sesion");
       }
       const data = await response.json();
+
       setIsCorrect(false);
+
       login(data.user, data.access_token);
+
       navigate("/rooms");
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -81,14 +72,14 @@ const Login = () => {
         <div className="mb-6 w-full">
           <label
             htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block lg:text-lg mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Email
           </label>
           <input
             type="email"
             id="email"
-            className="bg-gray-50 w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 lg:text-lg  w-full border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="ejemplo@yatusabes.com"
             required
           />
@@ -96,14 +87,14 @@ const Login = () => {
         <div className="mb-2">
           <label
             htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            className="block mb-2 lg:text-lg text-sm font-medium text-gray-900 dark:text-white"
           >
             Contraseña
           </label>
           <input
             type="password"
             id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="•••••••••"
             required
           />
@@ -111,7 +102,7 @@ const Login = () => {
 
         <div className="flex flex-col justify-center ">
           <div
-            className={`text-red-500 select-none text-center mb-3 transition-opacity ${isCorrect ? "opacity-100" : "opacity-0"}`}
+            className={`text-red-500 font-bold bg-black/50 py-2 rounded-lg select-none text-center mb-3 transition-opacity ${isCorrect ? "opacity-100" : "opacity-0"}`}
           >
             <p>Datos incorrectos, intente de nuevo</p>
           </div>
