@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from app.db.database import engine, SessionLocal, Base, get_db
@@ -10,6 +10,7 @@ from app.schemas.user_schema import UserCreate, UserLogin, RegisterResponse
 from app.schemas.auth_schema import TokenResponse, LoginRequest
 from app.utils.auth_password import set_password, check_password
 from app.utils.jwt import create_access_token, get_current_user
+from app.utils.connection_manager import ConnectionManager
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
@@ -17,6 +18,7 @@ import os
 load_dotenv()  # Cargar variables de entorno desde .env
 
 app = FastAPI() # FastAPI
+manager = ConnectionManager()
 
 origins = [os.getenv("FRONTEND_URL")]
 
@@ -99,3 +101,38 @@ def user_login(user_login: UserLogin, db: Session = Depends(get_db)):
     }
   }
 
+@app.get("/rooms_create")
+def rooms_create(db: Session = Depends(get_db)):
+
+  test_rooms = [
+    {"name": "General"},
+    {"name": "Programación"}
+  ]
+
+  created_rooms = []
+
+  for room_data in test_rooms:
+      # Verifica si ya existe para no duplicar
+      existing_room = db.query(ChatRoom).filter_by(name=room_data["name"]).first()
+      if not existing_room:
+          new_room = ChatRoom(name=room_data["name"])
+          db.add(new_room)
+          created_rooms.append(room_data["name"])
+
+  db.commit()
+  return {"message": "Salas creadas", "rooms": created_rooms}
+
+@app.get("/rooms")
+def rooms(db: Session = Depends(get_db)):
+  rooms = db.query(ChatRoom).all()
+  return [{"id": room.id, "name": room.name} for room in rooms]
+
+@app.websocket("/ws/{room}")
+async def websocket_endpoint(websocket: WebSocket, room: str):
+    await manager.connect(websocket, room)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await manager.broadcast(data, room)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, room)
