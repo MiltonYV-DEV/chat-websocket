@@ -48,8 +48,14 @@ const Navbar: React.FC = () => {
       </nav>
       <div className="flex justify-center fixed w-full">
         <div
-          className={`${menuActive ? "top-[75px]" : "top-[-200%]"} transition-all ease-in-out duration-700 w-[97%] bg-black/50 rounded-lg backdrop-blur-md fixed max-w-[1200px] h-[calc(100vh-85px)] lg:h-[calc(100vh-90px)]`}
-        ></div>
+          className={`flex text-2xl flex-col justify-center items-center ${menuActive ? "top-[75px]" : "top-[-200%]"} transition-all ease-in-out duration-700 w-[97%] bg-black/50 rounded-lg backdrop-blur-md fixed max-w-[1200px] h-[calc(100vh-85px)] lg:h-[calc(100vh-90px)]`}
+        >
+          {navItems.map((item) => (
+            <a className="hover:scale-125 transition-all" href={item.href}>
+              {item.item}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
