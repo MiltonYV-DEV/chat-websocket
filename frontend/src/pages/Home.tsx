@@ -1,5 +1,23 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 const Home = () => {
+  const roomsCreate = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/rooms_create`,
+      );
+
+      const data = await response.json();
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    roomsCreate();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
