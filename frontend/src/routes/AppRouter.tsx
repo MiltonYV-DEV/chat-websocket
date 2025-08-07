@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Rooms from "../pages/Rooms";
 import { AnimatePresence } from "framer-motion";
+import Profile from "../pages/Profile.tsx";
 
 const AppRouter = () => {
   const location = useLocation();
@@ -15,6 +16,7 @@ const AppRouter = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/rooms" element={<Rooms />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </AnimatePresence>
     </div>

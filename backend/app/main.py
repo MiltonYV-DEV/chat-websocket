@@ -136,3 +136,7 @@ async def websocket_endpoint(websocket: WebSocket, room: str):
             await manager.broadcast(data, room)
     except WebSocketDisconnect:
         manager.disconnect(websocket, room)
+
+@app.post("/user_update")
+def user_update(user_data):
+  print(user_data)
