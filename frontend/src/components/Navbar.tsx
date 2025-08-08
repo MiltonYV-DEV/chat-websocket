@@ -5,7 +5,7 @@ import "./styles/Navbar.css";
 
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState<string | null>(null);
   const { logout } = useAuthStore.getState();
   const navigate = useNavigate();
 
