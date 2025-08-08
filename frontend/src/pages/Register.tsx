@@ -134,6 +134,7 @@ const Register = () => {
           <input
             type="password"
             id="password"
+            minLength={6}
             className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="•••••••••"
             required
@@ -148,6 +149,7 @@ const Register = () => {
             Repetir contraseña
           </label>
           <input
+            minLength={6}
             type="password"
             id="password_confirm"
             className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -165,7 +167,7 @@ const Register = () => {
         </div>
         <div className="flex justify-center">
           <button
-            className={`${isValid ? "bg-green-500" : "bg-gray-500"} cursor-pointer  transition-colors p-4 px-4 rounded-lg py-1`}
+            className={`${isValid ? "bg-green-500" : "bg-gray-500"} w-full cursor-pointer  transition-colors p-4 px-4 rounded-lg py-1`}
           >
             Crear
           </button>

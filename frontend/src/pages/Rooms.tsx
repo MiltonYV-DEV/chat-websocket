@@ -19,6 +19,7 @@ const Rooms = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
+  const [isActive, setIsActive] = useState(false);
 
   const getRooms = async () => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/rooms`);
@@ -44,6 +45,14 @@ const Rooms = () => {
   useEffect(() => {
     getRooms();
   }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("access_token")) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }, [isActive]);
 
   useEffect(() => {
     if (activeRoom) {
@@ -83,7 +92,13 @@ const Rooms = () => {
   }, [activeRoom]);
 
   return (
-    <motion.div className="h-screen bg-gradient-to-br from-emerald-600 to-blue-800 flex-col gap-4 flex justify-center items-center p-2">
+    <motion.div
+      initial={{ opacity: 0, x: -30 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 30 }}
+      transition={{ duration: 0.3 }}
+      className="h-screen bg-gradient-to-br from-emerald-600 to-blue-800 flex-col gap-4 flex justify-center items-center p-2"
+    >
       <h1 className="text-2xl lg:text-3xl text-blue-400">Salas</h1>
 
       {/* Salas disponibles */}

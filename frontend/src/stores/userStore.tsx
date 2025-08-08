@@ -28,8 +28,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   logout: () => {
     set({ user: null, token: null });
-    localStorage.removeItem("accsess_token");
+    localStorage.removeItem("access_token");
     localStorage.removeItem("user");
     localStorage.removeItem("username");
+    console.log("Cerraste sesion");
   },
 }));
