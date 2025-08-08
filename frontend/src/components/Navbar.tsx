@@ -1,7 +1,13 @@
 import { useState } from "react";
+import { useAuthStore } from "../stores/userStore";
+import { useNavigate } from "react-router-dom";
+
 import "./styles/Navbar.css"; // Assuming you have a CSS file for styles
+
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
+  const { logout } = useAuthStore.getState();
+  const navigate = useNavigate();
 
   const handleNav = () => {
     setMenuActive(!menuActive);
@@ -13,12 +19,16 @@ const Navbar: React.FC = () => {
       href: "/",
     },
     {
+      item: "Salas",
+      href: "rooms",
+    },
+    {
       item: "Perfil",
       href: "/profile",
     },
     {
       item: "Cerrar sesion",
-      href: "/logout",
+      href: "",
     },
   ];
 
@@ -54,6 +64,10 @@ const Navbar: React.FC = () => {
             <a
               className="hover:scale-110 hover:bg-black/50 text-center w-full transition-all"
               href={item.href}
+              key={item.item}
+              onClick={() =>
+                item.item === "Cerrar " && logout() && navigate("/")
+              }
             >
               {item.item}
             </a>

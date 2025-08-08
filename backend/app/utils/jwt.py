@@ -35,7 +35,7 @@ def get_current_user(token: str = Depends(oauth_scheme), db: Session = Depends(g
   )
 
   try:
-    payload = jwr.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
     email: str = payload.get("sub")
     if email is None:
       raise credentials_exception

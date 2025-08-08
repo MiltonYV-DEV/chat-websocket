@@ -6,7 +6,7 @@ from app.models.user import User
 from app.models.chat_room import ChatRoom
 from app.models.message import Message
 from app.models.user_chat_room import UserChatRoom
-from app.schemas.user_schema import UserCreate, UserLogin, RegisterResponse
+from app.schemas.user_schema import UserCreate, UserLogin, RegisterResponse, UserUpdate, UserUpdateResponse
 from app.schemas.auth_schema import TokenResponse, LoginRequest
 from app.utils.auth_password import set_password, check_password
 from app.utils.jwt import create_access_token, get_current_user
@@ -137,6 +137,40 @@ async def websocket_endpoint(websocket: WebSocket, room: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket, room)
 
-@app.post("/user_update")
-def user_update(user_data):
-  print(user_data)
+@app.put("/user_update")
+def user_update(
+    data: UserUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    user = current_user
+
+    if not check_password(data.password, user.password):
+        raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
+
+    # Actualizar username si vino y no está vacío
+    if data.username is not None and data.username.strip() != "":
+        user.username = data.username.strip()
+
+    # Actualizar email si vino y no está vacío
+    if data.email is not None and data.email.strip() != "":
+        user.email = data.email.strip()
+
+    # Actualizar contraseña si es distinta de la actual
+    if data.password_new is not None and data.password_new.strip() != "":
+        if check_password(data.password_new, user.password):
+            raise HTTPException(status_code=400, detail="La nueva contraseña no puede ser igual a la actual")
+        user.password = set_password(data.password_new.strip())
+
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "message": "Datos actualizados correctamente",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email
+        }
+    }
+
