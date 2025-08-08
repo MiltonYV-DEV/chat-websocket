@@ -5,7 +5,7 @@ import "./styles/Navbar.css";
 
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
-  const [token, setToken] = useState(localStorage.getItem("access_token"));
+  const [token, setToken] = useState("");
   const { logout } = useAuthStore.getState();
   const navigate = useNavigate();
 
@@ -35,8 +35,11 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("access_token"));
-  }, [token]);
+    const tokenFromStorage = localStorage.getItem("access_token");
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+    }
+  }, []);
 
   return (
     <div className="fixed z-50">
