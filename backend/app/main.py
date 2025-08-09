@@ -18,6 +18,7 @@ import os
 load_dotenv()  # Cargar variables de entorno desde .env
 
 app = FastAPI() # FastAPI
+
 manager = ConnectionManager()
 
 origins = [os.getenv("FRONTEND_URL")]
@@ -32,8 +33,7 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
-
-@app.get("/")
+@app.get("/") # no necesita datos
 def read_root():
   return {"message": "Backend corriendo! para proyecto de diseno y fundamentos"}
 

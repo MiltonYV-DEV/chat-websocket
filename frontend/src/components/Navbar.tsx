@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
         <div className="flex max-w-[1200px] w-full m-2 h-[60px] bg-black/50 backdrop-blur rounded-lg justify-between items-center text-xl p-2 lg:px-4 text-white">
           <a href="/">
             <h1 className="text-2xl lg:text-3xl font-bold">
-              Idea<span className="text-blue-400 font-bold">World!</span>
+              Chat<span className="text-blue-400 font-bold">World!</span>
             </h1>
           </a>
 
