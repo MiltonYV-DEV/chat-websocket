@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 const Home = () => {
   const roomsCreate = async () => {
     try {
@@ -30,18 +31,18 @@ const Home = () => {
         Bienvenido a <span className="text-blue-400 font-bold">ideaWorld</span>
       </h2>
       <div className="flex gap-1">
-        <a
-          href="Login"
+        <Link
+          to="/Login"
           className="bg-blue-500 px-3 py-1 rounded-lg lg:text-lg hover:bg-blue-600 transition-colors"
         >
           Iniciar sesion
-        </a>
-        <a
-          href="Register"
+        </Link>
+        <Link
+          to="/Register"
           className="bg-green-600 px-3 py-1 rounded-lg lg:text-lg hover:bg-green-700 transition-colors"
         >
           Registrarse
-        </a>
+        </Link>
       </div>
     </motion.div>
   );

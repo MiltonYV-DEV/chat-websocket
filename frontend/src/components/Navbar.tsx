@@ -5,9 +5,10 @@ import "./styles/Navbar.css";
 
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
   const { logout } = useAuthStore.getState();
-  const navigate = useNavigate();
+  const token = useAuthStore((s) => s.token);
+  const [isActive, setIsActive] = useState(false);
+  const logout = useAuthStore((state) => )
 
   const handleNav = () => {
     setMenuActive(!menuActive);
@@ -23,23 +24,9 @@ const Navbar: React.FC = () => {
     },
   ];
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const option = e.currentTarget.id;
-
-    if (option === "Cerrar sesión") {
-      logout();
-      navigate("/");
-    } else if (option === "Iniciar sesión") {
-      navigate("/login");
-    }
-  };
-
   useEffect(() => {
-    const tokenFromStorage = localStorage.getItem("access_token");
-    if (tokenFromStorage) {
-      setToken(tokenFromStorage);
-    }
-  }, []);
+    console.log(token);
+  }, [token]);
 
   return (
     <div className="fixed z-50">
@@ -83,21 +70,30 @@ const Navbar: React.FC = () => {
         <div
           className={`flex text-3xl flex-col justify-center items-center ${menuActive ? "top-[75px]" : "top-[-200%]"} transition-all ease-in-out duration-700 w-[97%] bg-black/50 rounded-lg backdrop-blur-md fixed max-w-[1200px] h-[calc(100vh-85px)] lg:h-[calc(100vh-90px)]`}
         >
-          {navItems.map((item) => (
-            <Link
-              className="hover:scale-110 hover:bg-black/50 text-center w-full transition-all"
-              to={item.href}
-              onClick={handleClick}
-              key={item.item}
-              id={item.item}
-            >
-              {item.item === "Cerrar sesión"
-                ? token
-                  ? "Cerrar sesión"
-                  : "Iniciar sesión"
-                : item.item}
+          {/* {navItems.map((item) => ( */}
+          {/*   <Link */}
+          {/*     className="hover:scale-110 hover:bg-black/50 text-center w-full transition-all" */}
+          {/*     to={item.href} */}
+          {/*     onClick={handleClick} */}
+          {/*     key={item.item} */}
+          {/*     id={item.item} */}
+          {/*   > */}
+          {/*     {item.item === "Cerrar sesión" */}
+          {/*       ? token */}
+          {/*         ? "Cerrar sesión" */}
+          {/*         : "Iniciar sesión" */}
+          {/*       : item.item} */}
+          {/*   </Link> */}
+          {/* ))} */}
+          {}
+          <Link to={"/"}>Inicio</Link>
+          {token && <Link to={"/Profile"}>Perfil</Link>}
+          {token && <Link to={"Rooms"}>Salas</Link>}
+          {token && (
+            <Link onClick={() => {}} to={"/Login"}>
+              Cerrar sesión
             </Link>
-          ))}
+          )}
         </div>
       </div>
     </div>
