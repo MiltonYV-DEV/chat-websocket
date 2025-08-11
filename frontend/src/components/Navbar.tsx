@@ -8,7 +8,6 @@ const Navbar: React.FC = () => {
   const { logout } = useAuthStore.getState();
   const token = useAuthStore((s) => s.token);
   const [isActive, setIsActive] = useState(false);
-  const logout = useAuthStore((state) => )
 
   const handleNav = () => {
     setMenuActive(!menuActive);
@@ -25,7 +24,7 @@ const Navbar: React.FC = () => {
   ];
 
   useEffect(() => {
-    console.log(token);
+    token ? console.log("token existe") : console.log("token no existe");
   }, [token]);
 
   return (
@@ -52,18 +51,18 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          <div className="md:inline-flex gap-2 hidden">
-            {navItems.map((item) => (
-              <a
-                key={item.item}
-                onClick={() => item.item === "Cerrar sesion" && logout()}
-                className="hover:text-blue-400 transition-colors"
-                href={item.href}
-              >
-                {item.item}
-              </a>
-            ))}
-          </div>
+          {/* <div className="md:inline-flex gap-2 hidden"> */}
+          {/*   {navItems.map((item) => ( */}
+          {/*     <a */}
+          {/*       key={item.item} */}
+          {/*       onClick={() => item.item === "Cerrar sesion" && logout()} */}
+          {/*       className="hover:text-blue-400 transition-colors" */}
+          {/*       href={item.href} */}
+          {/*     > */}
+          {/*       {item.item} */}
+          {/*     </a> */}
+          {/*   ))} */}
+          {/* </div> */}
         </div>
       </nav>
       <div className="flex justify-center fixed w-full md:hidden">
@@ -89,8 +88,10 @@ const Navbar: React.FC = () => {
           <Link to={"/"}>Inicio</Link>
           {token && <Link to={"/Profile"}>Perfil</Link>}
           {token && <Link to={"Rooms"}>Salas</Link>}
+          {token ?? <Link to={"/login"}>Iniciar sesión</Link>}
+          {token ?? <Link to={"/register"}>Registrate</Link>}
           {token && (
-            <Link onClick={() => {}} to={"/Login"}>
+            <Link to={"/"} onClick={() => logout()}>
               Cerrar sesión
             </Link>
           )}

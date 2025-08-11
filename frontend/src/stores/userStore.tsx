@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface User {
   id: number;
@@ -10,43 +11,44 @@ interface User {
 type AuthState = {
   user: User | null;
   token: string | null;
+  hasHydrated: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
-  hydrateFromStorage: () => void; // 👈 para App
+  setHasHydrated: (v: boolean) => void;
+  verifySession: () => Promise<boolean>;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
-  user: null,
-  token: null,
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set, get) => ({
+      user: null,
+      token: null,
+      hasHydrated: false,
 
-  login: (user, token) => {
-    // ✅ guardar en el estado
-    set({ user, token });
-    // y también en localStorage (tu enfoque)
-    localStorage.setItem("access_token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("username", user.username);
-  },
+      login: (user, token) => set({ user, token }),
+      logout: () => set({ user: null, token: null }),
+      setHasHydrated: (v) => set({ hasHydrated: v }),
 
-  logout: () => {
-    set({ user: null, token: null });
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("user");
-    localStorage.removeItem("username");
-    console.log("Cerraste sesion");
-  },
-
-  hydrateFromStorage: () => {
-    const token = localStorage.getItem("access_token");
-    let user: User | null = null;
-    const raw = localStorage.getItem("user");
-    if (raw) {
-      try {
-        user = JSON.parse(raw) as User;
-      } catch {
-        user = null;
-      }
-    }
-    set({ token, user });
-  },
-}));
+      verifySession: async () => {
+        const { token } = get();
+        if (!token) return false;
+        // TODO: valida token con API
+        const ok = true;
+        if (!ok) get().logout();
+        return ok;
+      },
+    }),
+    {
+      name: "auth-store",
+      storage: createJSONStorage(() => localStorage),
+      // Guarda solo lo necesario
+      partialize: (s) => ({ user: s.user, token: s.token }),
+      // Hook de rehidratación post-carga
+      onRehydrateStorage: () => (state, error) => {
+        if (error) console.error("Error rehydrating:", error);
+        state?.verifySession?.().finally(() => state?.setHasHydrated?.(true));
+      },
+      version: 1,
+    },
+  ),
+);
