@@ -28,7 +28,8 @@ const Home = () => {
       className="h-screen flex-col gap-4 flex justify-center items-center"
     >
       <h2 className="text-xl md:text-2xl">
-        Bienvenido a <span className="text-blue-400 font-bold">ideaWorld</span>
+        Bienvenido a <span className="font-bold">Chat</span>
+        <span className="font-bold text-blue-400">World</span>
       </h2>
       <div className="flex gap-1">
         <Link

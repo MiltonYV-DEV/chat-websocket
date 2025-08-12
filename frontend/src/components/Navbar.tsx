@@ -7,25 +7,10 @@ const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
   const { logout } = useAuthStore.getState();
   const token = useAuthStore((s) => s.token);
-  const [isActive, setIsActive] = useState(false);
 
   const handleNav = () => {
     setMenuActive(!menuActive);
   };
-
-  const navItems = [
-    { item: "Inicio", href: "/" },
-    { item: "Perfil", href: "/profile" },
-    { item: "Salas", href: "/rooms" },
-    {
-      item: token ? "Cerrar sesión" : "Iniciar sesión",
-      href: token ? "/" : "/login",
-    },
-  ];
-
-  useEffect(() => {
-    token ? console.log("token existe") : console.log("token no existe");
-  }, [token]);
 
   return (
     <div className="fixed z-50">
@@ -51,18 +36,23 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* <div className="md:inline-flex gap-2 hidden"> */}
-          {/*   {navItems.map((item) => ( */}
-          {/*     <a */}
-          {/*       key={item.item} */}
-          {/*       onClick={() => item.item === "Cerrar sesion" && logout()} */}
-          {/*       className="hover:text-blue-400 transition-colors" */}
-          {/*       href={item.href} */}
-          {/*     > */}
-          {/*       {item.item} */}
-          {/*     </a> */}
-          {/*   ))} */}
-          {/* </div> */}
+          <div className="md:inline-flex gap-2 hidden">
+            <Link to={"/"}>Inicio</Link>
+            {token ? (
+              <>
+                <Link to="/Profile">Perfil</Link>
+                <Link to="/Rooms">Salas</Link>
+                <Link to="/" onClick={logout}>
+                  Cerrar sesión
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/register">Registrate</Link>
+                <Link to="/login">Iniciar sesión</Link>
+              </>
+            )}
+          </div>
         </div>
       </nav>
       <div className="flex justify-center fixed w-full md:hidden">
@@ -86,14 +76,19 @@ const Navbar: React.FC = () => {
           {/* ))} */}
           {}
           <Link to={"/"}>Inicio</Link>
-          {token && <Link to={"/Profile"}>Perfil</Link>}
-          {token && <Link to={"Rooms"}>Salas</Link>}
-          {token ?? <Link to={"/login"}>Iniciar sesión</Link>}
-          {token ?? <Link to={"/register"}>Registrate</Link>}
-          {token && (
-            <Link to={"/"} onClick={() => logout()}>
-              Cerrar sesión
-            </Link>
+          {token ? (
+            <>
+              <Link to="/Profile">Perfil</Link>
+              <Link to="/Rooms">Salas</Link>
+              <Link to="/" onClick={logout}>
+                Cerrar sesión
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Iniciar sesión</Link>
+              <Link to="/register">Registrate</Link>
+            </>
           )}
         </div>
       </div>
