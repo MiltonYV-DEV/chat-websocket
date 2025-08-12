@@ -39,5 +39,5 @@ Aplicación de chat en tiempo real que permite a los usuarios comunicarse a trav
 
 ### **1️⃣ Clonar repositorio**
 ```bash
-git clone https://github.com/usuario/chat-websocket.git
+git clone https://github.com/MiltonYV-DEV/chat-websocket.git
 cd chat-websocket
