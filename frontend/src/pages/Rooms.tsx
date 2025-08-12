@@ -146,9 +146,9 @@ const Rooms = () => {
             onSubmit={(e) => e.preventDefault()}
             className="flex pt-2 gap-2"
           >
-            <textarea
+            <input
               className="bg-slate-800 p-2 rounded-lg resize-none w-full text-white"
-              rows={2}
+              // rows={2}
               value={input}
               onChange={(e) => setInput(e.currentTarget.value)}
             />
