@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuthStore } from "../stores/userStore";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./styles/Navbar.css";
 
 const Navbar: React.FC = () => {
@@ -12,15 +12,18 @@ const Navbar: React.FC = () => {
     setMenuActive(!menuActive);
   };
 
+  const animationMenu =
+    "hover:scale-110 hover:bg-black/50 w-full text-center transition-all";
+
   return (
     <div className="fixed z-50">
       <nav className="fixed w-full flex justify-center z-50">
         <div className="flex max-w-[1200px] w-full m-2 h-[60px] bg-black/50 backdrop-blur rounded-lg justify-between items-center text-xl p-2 lg:px-4 text-white">
-          <a href="/">
+          <Link to="/">
             <h1 className="text-2xl lg:text-3xl font-bold">
               Chat<span className="text-blue-400 font-bold">World!</span>
             </h1>
-          </a>
+          </Link>
 
           {/* Menu hamburguesa */}
           <div className="md:hidden">
@@ -36,20 +39,46 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          <div className="md:inline-flex gap-2 hidden">
-            <Link to={"/"}>Inicio</Link>
+          <div className="md:inline-flex gap-3 hidden ">
+            <Link to={"/"} className="hover:text-blue-400  transition-all">
+              Inicio
+            </Link>
             {token ? (
               <>
-                <Link to="/Profile">Perfil</Link>
-                <Link to="/Rooms">Salas</Link>
-                <Link to="/" onClick={logout}>
+                <Link
+                  to="/Profile"
+                  className="hover:text-blue-400 transition-all"
+                >
+                  Perfil
+                </Link>
+                <Link
+                  className="hover:text-blue-400 transition-all"
+                  to="/Rooms"
+                >
+                  Salas
+                </Link>
+                <Link
+                  className="hover:text-blue-400 transition-all"
+                  to="/"
+                  onClick={logout}
+                >
                   Cerrar sesión
                 </Link>
               </>
             ) : (
               <>
-                <Link to="/register">Registrate</Link>
-                <Link to="/login">Iniciar sesión</Link>
+                <Link
+                  to="/register"
+                  className="hover:text-blue-400 transition-all"
+                >
+                  Registrate
+                </Link>
+                <Link
+                  to="/login"
+                  className="hover:text-blue-400 transition-all"
+                >
+                  Iniciar sesión
+                </Link>
               </>
             )}
           </div>
@@ -75,19 +104,29 @@ const Navbar: React.FC = () => {
           {/*   </Link> */}
           {/* ))} */}
           {}
-          <Link to={"/"}>Inicio</Link>
+          <Link to={"/"} className={animationMenu}>
+            Inicio
+          </Link>
           {token ? (
             <>
-              <Link to="/Profile">Perfil</Link>
-              <Link to="/Rooms">Salas</Link>
-              <Link to="/" onClick={logout}>
+              <Link to="/Profile" className={animationMenu}>
+                Perfil
+              </Link>
+              <Link to="/Rooms" className={animationMenu}>
+                Salas
+              </Link>
+              <Link to="/" className={animationMenu} onClick={logout}>
                 Cerrar sesión
               </Link>
             </>
           ) : (
             <>
-              <Link to="/login">Iniciar sesión</Link>
-              <Link to="/register">Registrate</Link>
+              <Link to="/login" className={animationMenu}>
+                Iniciar sesión
+              </Link>
+              <Link to="/register" className={animationMenu}>
+                Registrate
+              </Link>
             </>
           )}
         </div>
