@@ -17,6 +17,9 @@ const Register = () => {
   const [email, setEmail] = useState<string>("");
   const [isValid, setIsValid] = useState<boolean>(false);
   const [errorCreate, setErrorCreate] = useState<boolean>(false);
+  const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false);
+  const [passwordConfirmIsVisible, setPasswordConfirmIsVisible] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -131,15 +134,27 @@ const Register = () => {
           >
             Contraseña
           </label>
-          <input
-            type="password"
-            id="password"
-            minLength={6}
-            className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="•••••••••"
-            required
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
+          <div className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 flex justify-between items-center w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input
+              type={passwordIsVisible ? "text" : "password"}
+              id="password"
+              minLength={6}
+              placeholder="•••••••••"
+              required
+              onChange={(e) => setPassword(e.currentTarget.value)}
+            />
+
+            <button
+              className="flex items-center"
+              onClick={() => setPasswordIsVisible(!passwordIsVisible)}
+            >
+              {passwordIsVisible ? (
+                <i className="bx bx-low-vision" />
+              ) : (
+                <i className="bx bx-eye-big" />
+              )}
+            </button>
+          </div>
         </div>
         <div className="mb-3">
           <label
@@ -148,15 +163,28 @@ const Register = () => {
           >
             Repetir contraseña
           </label>
-          <input
-            minLength={6}
-            type="password"
-            id="password_confirm"
-            className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="•••••••••"
-            required
-            onChange={(e) => setPasswordConfirm(e.currentTarget.value)}
-          />
+          <div className="bg-gray-50 lg:text-lg border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 flex justify-between w-full p-2.5 dark:bg-black/50 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <input
+              minLength={6}
+              type={passwordConfirmIsVisible ? "text" : "password"}
+              id="password_confirm"
+              placeholder="•••••••••"
+              required
+              onChange={(e) => setPasswordConfirm(e.currentTarget.value)}
+            />
+            <button
+              className="flex items-center"
+              onClick={() =>
+                setPasswordConfirmIsVisible(!passwordConfirmIsVisible)
+              }
+            >
+              {passwordConfirmIsVisible ? (
+                <i className="bx bx-low-vision" />
+              ) : (
+                <i className="bx bx-eye-big" />
+              )}
+            </button>
+          </div>
         </div>
         <div className="text-center p-2">
           <p
