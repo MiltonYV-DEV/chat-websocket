@@ -74,12 +74,12 @@ const Register = () => {
       isUsernameValid && isEmailValid && isPasswordValid && isPasswordMatch;
     setIsValid(allValid);
 
-    console.log({
-      isUsernameValid,
-      isEmailValid,
-      isPasswordValid,
-      isPasswordMatch,
-    });
+    // console.log({
+    //   isUsernameValid,
+    //   isEmailValid,
+    //   isPasswordValid,
+    //   isPasswordMatch,
+    // });
   }, [username, email, password, passwordConfirm]);
 
   return (
