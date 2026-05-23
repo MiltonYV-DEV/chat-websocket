@@ -140,7 +140,7 @@ const Register = () => {
               type={passwordIsVisible ? "text" : "password"}
               id="password"
               minLength={6}
-              placeholder="•••••••••"
+              placeholder="•••••••••(incluya un número)"
               required
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
@@ -169,7 +169,7 @@ const Register = () => {
               minLength={6}
               type={passwordConfirmIsVisible ? "text" : "password"}
               id="password_confirm"
-              placeholder="•••••••••"
+              placeholder="•••••••••(incluya un número)"
               required
               onChange={(e) => setPasswordConfirm(e.currentTarget.value)}
             />
