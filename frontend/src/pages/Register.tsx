@@ -140,7 +140,7 @@ const Register = () => {
               type={passwordIsVisible ? "text" : "password"}
               id="password"
               minLength={4}
-              placeholder="•••••••••(incluya un número)"
+              placeholder="•••••••••"
               required
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
